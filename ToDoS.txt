@@ -2,4 +2,12 @@ background
 card backside
 0-10 cards
 1-9 black
-"sketches" joker/event/special 
+"sketches" joker/event/special
+
+
+Problem: incentivise playing cards?
+Goal is to play the 0, why not draw until you get the 0?
+
+Ideas:
+Playing a card allows you to draw one again?
+You get points for each card you play?

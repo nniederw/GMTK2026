@@ -18,6 +18,7 @@ j- black number: play like next normal number, reveals card from "event" pool
 j- pot of greed: draw 2 cards
 j- red herring: doesnt do jack
 j- xxx: next player discards 2 cards of his choice
+j- 
 
 s- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown)

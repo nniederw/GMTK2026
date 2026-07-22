@@ -3,3 +3,17 @@ choice driven apocalypse game, less doing stuff more story/show human psyche (on
 something something space ship- 
 increasing quota game-
 card game- count down, who plays zero wins?, increasing challenge through random draw and special effect cards
+racing game i guess?- 
+puzzle game- time limit till loss,
+
+
+card game: 
+game starts with 10 in middle, you can only play next numbercard counting down, jokers can always be played on your turn, 
+players get 5 cards from "normal" card pool (9-1) (1 rare (~2copies), 9common(~12copies))
+player get one card from "joker" pool
+"joker" pool = all special cards
+"special" pool ?= cards like skip, reverse turn order
+
+j- black number: play like normal number, reveals card from "event" pool
+j- pot of greed: draw 2 cards
+j- red herring: doesnt do jack

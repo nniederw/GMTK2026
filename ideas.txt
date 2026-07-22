@@ -8,12 +8,24 @@ puzzle game- time limit till loss,
 
 
 card game: 
-game starts with 10 in middle, you can only play next numbercard counting down, jokers can always be played on your turn, 
+game starts with 10 in middle, you can only play next numbercard counting down, jokers can always be played on your turn, goal is to play 0, instead of playing draw 1
 players get 5 cards from "normal" card pool (9-1) (1 rare (~2copies), 9common(~12copies))
-player get one card from "joker" pool
-"joker" pool = all special cards
-"special" pool ?= cards like skip, reverse turn order
+player get one card from "joker" pool (~20 dif cards, each unique, get shuffled in again after discard)
+"special" pool ?= cards like skip, reverse turn etc. (number depending of strength of effect)
+1 are shown openly to all
 
-j- black number: play like normal number, reveals card from "event" pool
+j- black number: play like next normal number, reveals card from "event" pool
 j- pot of greed: draw 2 cards
 j- red herring: doesnt do jack
+j- xxx: next player discards 2 cards of his choice
+
+s- add/substract: add/substract 1 from a chosen numbercard
+s- steal: steal 1 card from other player (cards not shown)
+s- trade: trade 2 cards from other player for 2 of yours (cards not shown)
+s- skip turn: skips chosen players next turn
+s- block: blocks an effect aiming at a single player, events cant be blocked
+s- reverse: reverses turn order
+s- 
+
+e- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
+e- 

@@ -14,7 +14,7 @@ player get one card from "joker" pool (~20 dif cards, each unique, get shuffled 
 "special" pool ?= cards like skip, reverse turn etc. (number depending of strength of effect)
 1 are shown openly to all
 
-j- black number: play like next normal number, reveals card from "event" pool
+j- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
 j- pot of greed: draw 2 cards
 j- red herring: doesnt do jack
 j- xxx: next player discards 2 cards of his choice

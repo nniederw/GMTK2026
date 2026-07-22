@@ -1,0 +1,5 @@
+background
+card backside
+0-10 cards
+1-9 black
+"sketches" joker/event/special 

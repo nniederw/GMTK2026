@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: NormalCardPool
+  m_EditorClassIdentifier: Assembly-CSharp::CardPool
+  Cards:
+  - Card: {fileID: 11400000, guid: bed245a3bd67b4a4e954ff30581ff08d, type: 2}
+    Quantity: 1
+  - Card: {fileID: 11400000, guid: 586e442fb6d59bb49a5de875866e9bc7, type: 2}
+    Quantity: 2
+  - Card: {fileID: 11400000, guid: abac355394745f54b86cb7c34bb4720b, type: 2}
+    Quantity: 3
+  - Card: {fileID: 11400000, guid: c169122d9a535124e9f65970285bf01b, type: 2}
+    Quantity: 4
+  - Card: {fileID: 11400000, guid: cd62aa0790cf2024f90c2f5820f274a7, type: 2}
+    Quantity: 5
+  - Card: {fileID: 11400000, guid: 3f000d9fd7afdc14a972fda7a835c3a3, type: 2}
+    Quantity: 6
+  - Card: {fileID: 11400000, guid: be956361c604454449654121c1e15e9a, type: 2}
+    Quantity: 7
+  - Card: {fileID: 11400000, guid: 172ececfd0c9e544aaf70898ead3ec8e, type: 2}
+    Quantity: 8
+  - Card: {fileID: 11400000, guid: 1df69ee9aebfe3342981e07de44779d7, type: 2}
+    Quantity: 9
+  - Card: {fileID: 11400000, guid: a7233d5d5a5b0484cafb8994d8296450, type: 2}
+    Quantity: 10

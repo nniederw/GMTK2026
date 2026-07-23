@@ -6,8 +6,8 @@ card backside
 
 
 Problem: incentivise playing cards?
-Goal is to play the 0, why not draw until you get the 0?
+Goal is to play the 0, why not draw until you get the 0? no 0 and barely any 1 available in deck/pool
 
 Ideas:
-Playing a card allows you to draw one again?
-You get points for each card you play?
+Playing a card allows you to draw one again? sounds like a good idea, only normal number cards maybe?
+You get points for each card you play? also a possibility, would need testing whats more fun

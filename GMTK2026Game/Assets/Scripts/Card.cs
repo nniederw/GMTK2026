@@ -23,6 +23,7 @@ public class Card : ScriptableObject
     public CardType CardType;
     public int Number;
     public JokerType JokerType;
+    public Sprite Sprite;
 }
 public enum CardType
 {

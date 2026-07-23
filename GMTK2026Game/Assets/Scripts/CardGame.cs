@@ -22,6 +22,7 @@ public class CardGame
     {
         foreach (Player player in Players)
         {
+            player.ClearCards();
             player.CardGame = this;
             for (int i = 0; i < StartCardCount; i++)
             {
@@ -41,6 +42,10 @@ public class CardGame
     {
         if (card.CardType == CardType.Number)
         {
+            if (LastPlayedCard == null)
+            {
+                return card.Number == 9;
+            }
             return LastPlayedCard.Number == card.Number - 1;
         }
         return true;

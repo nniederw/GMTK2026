@@ -8,6 +8,11 @@ public class CardGameGenerator : MonoBehaviour
     private CardGame CardGame;
     private void Start()
     {
+        RegenerateGame();
+    }
+    [ContextMenu("Regenerate Game")]
+    private void RegenerateGame()
+    {
         CardGame = new CardGame(NormalCardPool.Cards, Players.Select(i => i.GetComponent<PlayerContainer>()).Select(i => i.GetPlayer()));
     }
 }

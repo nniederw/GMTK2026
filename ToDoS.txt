@@ -1,7 +1,7 @@
 background
-card backside
-0-10 cards
-1-9 black
+card backside (done prov)
+0-10 cards (done prov)
+1-9 black (done prov)
 "sketches" joker/event/special
 
 

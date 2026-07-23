@@ -1,20 +1,42 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControler : MonoBehaviour, PlayerContainer
+public class PlayerControler : MonoBehaviour, PlayerBehaviour
 {
     [SerializeField] private ClickableCard CardPrefab;
     private Player Player = new Player();
     private List<ClickableCard> CardPrefabPool = new();
     private const int StartPoolSize = 5;
     private ClickableCard HighlightedCard = null;
-    private float CardLength = 2f;
+    private float CardLength = 1.75f;
+
+    private Action OnTurnEnd;
     private void Start()
     {
         for (int i = 0; i < StartPoolSize; i++)
         {
             AddClickableCardToPool();
         }
+        CardGameManager.SubscribeOnPlayStackClick(OnPlayStackClick);
+        CardGameManager.SubscribeOnDrawStackClick(OnDrawStackClick);
+    }
+    private void OnPlayStackClick()
+    {
+        if (HighlightedCard == null)
+        {
+            return;
+        }
+        Debug.Log($"Try playing card {HighlightedCard.Card}, playable: {Player.IsPlayableCard(HighlightedCard.Card)}");
+        if (Player.IsPlayableCard(HighlightedCard.Card))
+        {
+            HighlightedCard.Highlighted = false;
+            Player.PlayCard(HighlightedCard.Card);
+        }
+    }
+    private void OnDrawStackClick()
+    {
+        Player.DrawNormalCard();
     }
     private void AddClickableCardToPool()
     {
@@ -32,6 +54,11 @@ public class PlayerControler : MonoBehaviour, PlayerContainer
                 AddClickableCardToPool();
             }
             CardPrefabPool[i].Card = Player.GetCard(i);
+            CardPrefabPool[i].gameObject.SetActive(true);
+        }
+        for (int i = cardCount; i < CardPrefabPool.Count; i++)
+        {
+            CardPrefabPool[i].gameObject.SetActive(false);
         }
         float cardPos = -(cardCount - 1) / 2f * CardLength;
         for (int i = 0; i < cardCount; i++)
@@ -58,9 +85,12 @@ public class PlayerControler : MonoBehaviour, PlayerContainer
         HighlightedCard = card;
         card.Highlighted = true;
     }
-
     public Player GetPlayer()
     {
         return Player;
+    }
+    public void StartTurn(Action onTurnEnd)
+    {
+        OnTurnEnd = onTurnEnd;
     }
 }

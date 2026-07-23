@@ -13,6 +13,11 @@ public class Player
     {
         Cards.Add(card);
     }
+    public void PlayCard(Card card)
+    {
+        int index = Cards.IndexOf(card);
+        PlayCard(index);
+    }
     public void PlayCard(int index)
     {
         if (index < 0 || index >= Cards.Count)
@@ -22,6 +27,11 @@ public class Player
         Card card = Cards[index];
         Cards.RemoveAt(index);
         CardGame.PlayCard(this, card);
+    }
+    public void DrawNormalCard()
+    {
+        var card = CardGame.DrawCardFromNormalPool();
+        AddCard(card);
     }
     public IEnumerable<int> GetPlayableCardIndexes()
     {
@@ -43,8 +53,13 @@ public class Player
     {
         Cards = new();
     }
+    public bool IsPlayableCard(Card card)
+    {
+        return CardGame.IsPlayableCard(card);
+    }
 }
-public interface PlayerContainer
+public interface PlayerBehaviour
 {
     public Player GetPlayer();
+    public void StartTurn(Action onTurnEnd);
 }

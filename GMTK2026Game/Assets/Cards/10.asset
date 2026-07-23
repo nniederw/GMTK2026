@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02f6e2662235ecb4b9c8a5b3d56f455e, type: 3}
-  m_Name: 9
+  m_Name: 10
   m_EditorClassIdentifier: 
   CardType: 0
-  Number: 9
+  Number: 10
   JokerType: 0
-  Sprite: {fileID: -3498637171252315266, guid: 82ed1c7bb8874564da4b825e2f13cebc, type: 3}
+  Sprite: {fileID: 4961278001924015113, guid: da2f3f139e6efc741842da8013fa87fa, type: 3}
   BackSideSprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}

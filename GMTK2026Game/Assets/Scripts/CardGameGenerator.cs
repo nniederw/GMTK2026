@@ -5,6 +5,7 @@ public class CardGameGenerator : MonoBehaviour
 {
     [SerializeField] private List<GameObject> Players = new();
     [SerializeField] private CardPool NormalCardPool;
+    [SerializeField] private Card StartStackCard;
     private CardGame CardGame;
     private void Start()
     {
@@ -13,6 +14,6 @@ public class CardGameGenerator : MonoBehaviour
     [ContextMenu("Regenerate Game")]
     private void RegenerateGame()
     {
-        CardGame = new CardGame(NormalCardPool.Cards, Players.Select(i => i.GetComponent<PlayerContainer>()).Select(i => i.GetPlayer()));
+        CardGame = new CardGame(NormalCardPool.Cards, Players.Select(i => i.GetComponent<PlayerBehaviour>()).Select(i => i.GetPlayer()), StartStackCard);
     }
 }

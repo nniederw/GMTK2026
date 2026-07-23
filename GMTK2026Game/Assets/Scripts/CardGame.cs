@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 public class CardGame
 {
@@ -6,7 +7,7 @@ public class CardGame
     private List<Player> Players = new();
     private Queue<Card> NormalCardPool;
     public Card LastPlayedCard { get; private set; }
-    public CardGame(IEnumerable<CardQuantityPair> cards, IEnumerable<Player> players)
+    public CardGame(IEnumerable<CardQuantityPair> cards, IEnumerable<Player> players, Card startLastPlayedCard)
     {
         Players = players.ToList();
         var flattenedCards = cards.SelectMany(i => Enumerable.Repeat(i.Card, i.Quantity)).ToList();
@@ -16,6 +17,8 @@ public class CardGame
         {
             NormalCardPool.Enqueue(card);
         }
+        LastPlayedCard = startLastPlayedCard;
+        CardGameManager.SetPlayStackCard(LastPlayedCard);
         InitializePlayers();
     }
     private void InitializePlayers()
@@ -35,6 +38,7 @@ public class CardGame
         if (card.CardType == CardType.Number)
         {
             LastPlayedCard = card;
+            CardGameManager.SetPlayStackCard(LastPlayedCard);
         }
         //todo effect
     }
@@ -42,11 +46,12 @@ public class CardGame
     {
         if (card.CardType == CardType.Number)
         {
-            if (LastPlayedCard == null)
-            {
-                return card.Number == 9;
-            }
-            return LastPlayedCard.Number == card.Number - 1;
+            // if (LastPlayedCard == null)
+            // {
+            //     return card.Number == 9;
+            // }
+            UnityEngine.Debug.Log($"LastPlayedCard: {LastPlayedCard}, checking card: {card}");
+            return LastPlayedCard.Number - 1 == card.Number;
         }
         return true;
     }

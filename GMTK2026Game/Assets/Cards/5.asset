@@ -15,4 +15,5 @@ MonoBehaviour:
   CardType: 0
   Number: 5
   JokerType: 0
-  Sprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}
+  Sprite: {fileID: 1566570246301157487, guid: b8b1efa0e48e64b4499b077d8fad77a3, type: 3}
+  BackSideSprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}

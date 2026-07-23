@@ -8,6 +8,11 @@ public class Card : ScriptableObject
     public int Number;
     public JokerType JokerType;
     public Sprite Sprite;
+    public Sprite BackSideSprite;
+    public override string ToString()
+    {
+        return $"[{CardType},{Number},{JokerType}]";
+    }
 }
 public enum CardType
 {

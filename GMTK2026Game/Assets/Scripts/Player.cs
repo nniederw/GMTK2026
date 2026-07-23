@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 public class Player
 {
@@ -33,8 +34,17 @@ public class Player
             }
         }
     }
+    public int CardCount() => Cards.Count;
     public Card GetCard(int index)
     {
         return Cards[index];
     }
+    public void ClearCards()
+    {
+        Cards = new();
+    }
+}
+public interface PlayerContainer
+{
+    public Player GetPlayer();
 }

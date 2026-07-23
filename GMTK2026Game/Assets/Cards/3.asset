@@ -15,3 +15,4 @@ MonoBehaviour:
   CardType: 0
   Number: 3
   JokerType: 0
+  Sprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}

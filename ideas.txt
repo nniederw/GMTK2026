@@ -18,7 +18,8 @@ j- black number: play like next normal number, reveals card from "event" pool (c
 j- pot of greed: draw 2 cards (1 normal/1 joker)
 j- red herring: doesnt do jack
 j- xxx: next player discards 2 cards of his choice
-j- all seeing eye: you are able to see every players hand for 1 round
+j- all seeing eye: you are able to see every players hand until end of your next turn
+j- 
 
 s- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown)
@@ -26,7 +27,13 @@ s- trade: trade 2 cards from other player for 2 of yours (cards not shown)
 s- skip turn: skips chosen players next turn
 s- block: blocks an effect aiming at a single player, events cant be blocked
 s- reverse: reverses turn order
-s- 
+s-
 
 e- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
 e- inflation: all number values increase by 1
+e- robin hood: player with least amount of cards steals one from every other player
+e- christmas: each player gifts another player 1 card
+e- communism: players draw/discard up to average handcount when event is triggered
+e- deus ex machina: one numbercard in each players hand will be transformed to numbercard needed when event is triggered(if number is 0, next player not able to play it)
+e- (only if points are implemented)capitalism: from event trigger on forward, players can buy carddraw from chosen pool(free action), prices increase with each purchase (number 3p, joker 10p, spec 5p)?
+e-

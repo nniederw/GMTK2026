@@ -12,13 +12,13 @@ game starts with 10 in middle, you can only play next numbercard counting down, 
 players get 5 cards from "normal" card pool (9-1) (1 rare (~2copies), 9common(~12copies))
 player get one card from "joker" pool (~20 dif cards, each unique, get shuffled in again after discard)
 "special" pool ?= cards like skip, reverse turn etc. (number depending of strength of effect)
-1 are shown openly to all
+1s are shown openly to all
 
 j- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
-j- pot of greed: draw 2 cards
+j- pot of greed: draw 2 cards (1 normal/1 joker)
 j- red herring: doesnt do jack
 j- xxx: next player discards 2 cards of his choice
-j- 
+j- all seeing eye: you are able to see every players hand for 1 round
 
 s- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown)
@@ -29,4 +29,4 @@ s- reverse: reverses turn order
 s- 
 
 e- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
-e- 
+e- inflation: all number values increase by 1

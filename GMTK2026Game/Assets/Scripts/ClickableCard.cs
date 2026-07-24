@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ClickableCard : VisualCard
@@ -11,7 +12,7 @@ public class ClickableCard : VisualCard
     }
     private void OnMouseDown()
     {
-        OnCardClick.Invoke(this);
+        // OnCardClick.Invoke(this);
     }
     protected override void Start()
     {
@@ -25,6 +26,13 @@ public class ClickableCard : VisualCard
         if (!Input.GetMouseButtonDown(0))
         {
             return;
+        }
+        Vector2 mouseWorldPosition =
+        Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hits = Physics2D.OverlapPointAll(mouseWorldPosition);
+        if (hits.Any() && hits.Last() == BoxCollider2D)
+        {
+            OnCardClick.Invoke(this);
         }
     }
     [ContextMenu("Fit Collider")]
@@ -55,10 +63,11 @@ public class VisualCard : MonoBehaviour
     [SerializeField] private Color UnhighlightColor = new Color(0.8f, 0.8f, 0.8f);
     protected SpriteRenderer SpriteRenderer;
     public bool Highlighted = false;
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
     }
+    protected virtual void Start() { }
     protected virtual void Update()
     {
         if (Card != null)
@@ -66,5 +75,9 @@ public class VisualCard : MonoBehaviour
             SpriteRenderer.sprite = HideCard ? Card.BackSideSprite : Card.Sprite;
             SpriteRenderer.color = Highlighted ? HighlightColor : UnhighlightColor;
         }
+    }
+    public void SetSpriteSortingOrder(int order)
+    {
+        SpriteRenderer.sortingOrder = order;
     }
 }

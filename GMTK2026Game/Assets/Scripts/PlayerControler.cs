@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PlayerControler : MonoBehaviour, PlayerBehaviour
 {
     [SerializeField] private ClickableCard CardPrefab;
@@ -9,8 +8,7 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
     private List<ClickableCard> CardPrefabPool = new();
     private const int StartPoolSize = 5;
     private ClickableCard HighlightedCard = null;
-    private float CardLength = 1.75f;
-
+    private float CardLength = 1.45f;
     private Action OnTurnEnd;
     private void Start()
     {
@@ -55,6 +53,7 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
             }
             CardPrefabPool[i].Card = Player.GetCard(i);
             CardPrefabPool[i].gameObject.SetActive(true);
+            CardPrefabPool[i].SetSpriteSortingOrder(i);
         }
         for (int i = cardCount; i < CardPrefabPool.Count; i++)
         {
@@ -63,7 +62,7 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         float cardPos = -(cardCount - 1) / 2f * CardLength;
         for (int i = 0; i < cardCount; i++)
         {
-            CardPrefabPool[i].transform.localPosition = new Vector2(cardPos, 0f);
+            CardPrefabPool[i].transform.localPosition = new Vector3(cardPos, 0f, i);
             cardPos += CardLength;
         }
     }

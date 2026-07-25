@@ -14,9 +14,9 @@ player get one card from "joker" pool (~20 dif cards, each unique, get shuffled 
 "special" pool ?= cards like skip, reverse turn etc. (number depending of strength of effect)
 1s are shown openly to all
 
-jokers: green cards, image in "window", text box explaining effect
-j- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
-j- pot of greed: draw 2 cards (1 normal/1 joker)
+jokers: green cards, image in "window", text box explaining effect, namebox
+xj- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
+xj- pot of greed: draw 2 cards (1 normal/1 joker)
 j- red herring: doesnt do jack
 j- taxes: next player discards 2 cards of his choice
 j- all seeing eye: you are able to see every players hand until end of your next turn
@@ -24,22 +24,22 @@ j- plague doctor: gunk 1 random card of each opponents hand (card not usable for
 j- xxx: consists of 3 pieces, collecting all pieces in hand gives you a 0
 j- 
 
-specials: red cards, white ideograms (symbols), text box explaining effect
-s- add/substract: add/substract 1 from a chosen numbercard
+specials: red cards, white symbols, text box explaining effect, no name, 
+xs- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown) (make this a joker?)
 s- trade: trade 2 cards from other player for 2 of yours (cards not shown)
-s- skip turn: skips chosen players next turn
-s- block: blocks an effect aiming at a single player, events cant be blocked
-s- reverse: reverses turn order
-s- fusion: fuse 2 numbercards together (2 possible ways, just added value/can played as either one of initial cards or combined value)
+xs- skip turn: skips chosen players next turn
+xs- block: blocks an effect aiming at a single player, events cant be blocked
+xs- reverse: reverses turn order
+xs- fusion: fuse 2 numbercards together (2 possible ways, just added value/can played as either one of initial cards or combined value)
 s-
 
-events: simple full card arts, no text box
+events: simple full card arts, affects all players, no text box
 e- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
 e- inflation: all number values increase by 1
 e- robin hood: player with least amount of cards steals one from every other player
 e- christmas: each player gifts another player 1 card
 e- communism: players draw/discard up to average handcount when event is triggered
 e- deus ex machina: one numbercard in each players hand will be transformed to numbercard needed when event is triggered(if number is 0, next player not able to play it)
-e- (only if points are implemented)capitalism: from event trigger on forward, players can buy carddraw from chosen pool(free action), prices increase with each purchase (number 3p, joker 10p, spec 5p)?
+e- (only if points are implemented)capitalism: from event trigger on forward, players can buy carddraw from chosen pool(free action), prices increase with each purchase (starting number 3p, joker 10p, spec 5p)?
 e-

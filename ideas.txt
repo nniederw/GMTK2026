@@ -15,8 +15,8 @@ player get one card from "joker" pool (~20 dif cards, each unique, get shuffled 
 1s are shown openly to all
 
 jokers: green cards, image in "window", text box explaining effect, namebox
-j- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
-j- pot of greed: draw 2 cards (1 normal/1 joker)
+xj- black number: play like next normal number, reveals card from "event" pool (cant be played as 0)
+xj- pot of greed: draw 2 cards (1 normal/1 joker)
 j- red herring: doesnt do jack
 j- taxes: next player discards 2 cards of his choice
 j- all seeing eye: you are able to see every players hand until end of your next turn
@@ -25,13 +25,13 @@ j- xxx: consists of 3 pieces, collecting all pieces in hand gives you a 0
 j- 
 
 specials: red cards, white symbols, text box explaining effect, no name, 
-s- add/substract: add/substract 1 from a chosen numbercard
+xs- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown) (make this a joker?)
 s- trade: trade 2 cards from other player for 2 of yours (cards not shown)
-s- skip turn: skips chosen players next turn
-s- block: blocks an effect aiming at a single player, events cant be blocked
-s- reverse: reverses turn order
-s- fusion: fuse 2 numbercards together (2 possible ways, just added value/can played as either one of initial cards or combined value)
+xs- skip turn: skips chosen players next turn
+xs- block: blocks an effect aiming at a single player, events cant be blocked
+xs- reverse: reverses turn order
+xs- fusion: fuse 2 numbercards together (2 possible ways, just added value/can played as either one of initial cards or combined value)
 s-
 
 events: simple full card arts, affects all players, no text box

@@ -1,25 +1,47 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using UnityEngine;
 public class CardGame
 {
-    public const int StartCardCount = 5;
+    public const int StartNormalCardCount = 5;
+    public const int StartJokerCardCount = 1;
     private List<Player> Players = new();
     private Queue<Card> NormalCardPool;
+    private Queue<Card> JokerCardPool;
     public Card LastPlayedCard { get; private set; }
-    public CardGame(IEnumerable<CardQuantityPair> cards, IEnumerable<Player> players, Card startLastPlayedCard)
+    public List<Card> PlayedCards;//todo
+    private HashSet<Card> NormalCards;
+    private HashSet<Card> JokerCards;
+    public CardGame(IEnumerable<CardQuantityPair> cards, IEnumerable<CardQuantityPair> jokerCards, IEnumerable<Player> players, Card startLastPlayedCard)
     {
         Players = players.ToList();
-        var flattenedCards = cards.SelectMany(i => Enumerable.Repeat(i.Card, i.Quantity)).ToList();
-        var randomOrderCards = RandomUtils.RandomlyReorderList(flattenedCards);
         NormalCardPool = new();
-        foreach (var card in randomOrderCards)
+        JokerCardPool = new();
+        PlayedCards = new();
+        FillQueue(cards, NormalCardPool);
+        FillQueue(jokerCards, JokerCardPool);
+        NormalCards = cards.Select(i => i.Card).ToHashSet();
+        JokerCards = jokerCards.Select(i => i.Card).ToHashSet();
+        if (NormalCards.Intersect(JokerCards).Any())
         {
-            NormalCardPool.Enqueue(card);
+            Debug.Log($"Cards in {nameof(NormalCards)} & {nameof(JokerCards)} are not mutually exclusive.");
         }
         LastPlayedCard = startLastPlayedCard;
         CardGameManager.SetPlayStackCard(LastPlayedCard);
         InitializePlayers();
+    }
+    private void FillQueue(IEnumerable<CardQuantityPair> cards, Queue<Card> toFill)
+    {
+        var flattenedCards = cards.SelectMany(i => Enumerable.Repeat(i.Card, i.Quantity)).ToList();
+        FillQueue(flattenedCards, toFill);
+    }
+    private void FillQueue(IEnumerable<Card> cards, Queue<Card> toFill)
+    {
+        var randomOrderCards = RandomUtils.RandomlyReorderList(cards.ToList());
+        foreach (var card in randomOrderCards)
+        {
+            toFill.Enqueue(card);
+        }
     }
     private void InitializePlayers()
     {
@@ -27,30 +49,59 @@ public class CardGame
         {
             player.ClearCards();
             player.CardGame = this;
-            for (int i = 0; i < StartCardCount; i++)
+            for (int i = 0; i < StartNormalCardCount; i++)
             {
                 player.AddCard(DrawCardFromNormalPool());
             }
+            for (int i = 0; i < StartJokerCardCount; i++)
+            {
+                player.AddCard(DrawCardFromJokerPool());
+            }
         }
+    }
+    public void SetLastPlayedCard(Card card)
+    {
+        LastPlayedCard = card;
     }
     public void PlayCard(Player player, Card card)
     {
+        // if (card.Number != 10)
+        // {
+        //     PlayedCards.Add(card);
+        // }
         if (card.CardType == CardType.Number)
         {
             LastPlayedCard = card;
             CardGameManager.SetPlayStackCard(LastPlayedCard);
+            player.AddCard(DrawCardFromNormalPool());
+            player.AddCard(DrawCardFromJokerPool());
         }
+        if (card.CardType == CardType.Joker)
+        {
+            switch (card.JokerType)
+            {
+                case JokerType.PotOfGreed:
+                    player.AddCard(DrawCardFromNormalPool());
+                    player.AddCard(DrawCardFromJokerPool());
+                    break;
+                case JokerType.RedHerring:
+                    break;
+                case JokerType.Taxes:
+                    CardGameManager.PlayerDiscard(new PlayerIdentifier(nextPlayers: new List<int> { 1 }), 2);
+                    break;
+            }
+        }
+
         //todo effect
+    }
+    public void DiscardCard(Card card)
+    {
+        PlayedCards.Add(card);
     }
     public bool IsPlayableCard(Card card)
     {
         if (card.CardType == CardType.Number)
         {
-            // if (LastPlayedCard == null)
-            // {
-            //     return card.Number == 9;
-            // }
-            UnityEngine.Debug.Log($"LastPlayedCard: {LastPlayedCard}, checking card: {card}");
             return LastPlayedCard.Number - 1 == card.Number;
         }
         return true;
@@ -59,8 +110,74 @@ public class CardGame
     {
         return NormalCardPool.Any();
     }
+    public bool HasCardsInJokerPool()
+    {
+        return JokerCardPool.Any();
+    }
     public Card DrawCardFromNormalPool()
     {
-        return NormalCardPool.Dequeue();
+        if (HasCardsInNormalPool())
+        {
+            return NormalCardPool.Dequeue();
+        }
+        if (ShuffleNormalCardsBackIn())
+        {
+            return DrawCardFromNormalPool();
+        }
+        throw new System.Exception("No cards left in normal pool.");
+    }
+    public Card DrawCardFromJokerPool()
+    {
+        if (HasCardsInJokerPool())
+        {
+            return JokerCardPool.Dequeue();
+        }
+        if (ShuffleJokerCardsBackIn())
+        {
+            return DrawCardFromJokerPool();
+        }
+        throw new System.Exception("No cards left in joker pool.");
+    }
+    public bool ShuffleNormalCardsBackIn()
+    {
+        List<Card> normalCards = new();
+        List<Card> nonNormalCards = new();
+        foreach (var card in PlayedCards)
+        {
+            if (NormalCards.Contains(card))
+            {
+                normalCards.Add(card);
+                continue;
+            }
+            nonNormalCards.Add(card);
+        }
+        if (!normalCards.Any())
+        {
+            return false;
+        }
+        FillQueue(normalCards, NormalCardPool);
+        PlayedCards = nonNormalCards;
+        return true;
+    }
+    public bool ShuffleJokerCardsBackIn()
+    {
+        List<Card> jokerCards = new();
+        List<Card> nonJokerCards = new();
+        foreach (var card in PlayedCards)
+        {
+            if (JokerCards.Contains(card))
+            {
+                jokerCards.Add(card);
+                continue;
+            }
+            nonJokerCards.Add(card);
+        }
+        if (!jokerCards.Any())
+        {
+            return false;
+        }
+        FillQueue(jokerCards, JokerCardPool);
+        PlayedCards = nonJokerCards;
+        return true;
     }
 }

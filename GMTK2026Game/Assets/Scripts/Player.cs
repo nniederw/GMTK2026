@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 public class Player
 {
     private List<Card> Cards = new();
@@ -26,6 +27,7 @@ public class Player
         }
         Card card = Cards[index];
         Cards.RemoveAt(index);
+        Debug.Log($"Playing Card {card}");
         CardGame.PlayCard(this, card);
     }
     public void DrawNormalCard()
@@ -44,6 +46,15 @@ public class Player
             }
         }
     }
+    public IEnumerable<Card> GetAllCards()
+    => Cards;
+    public IEnumerable<(Card card, int index)> GetPlayableCards()
+    {
+        foreach (var index in GetPlayableCardIndexes())
+        {
+            yield return (Cards[index], index);
+        }
+    }
     public int CardCount() => Cards.Count;
     public Card GetCard(int index)
     {
@@ -52,6 +63,17 @@ public class Player
     public void ClearCards()
     {
         Cards = new();
+    }
+    public void DiscardCard(Card card)
+    {
+        int index = Cards.IndexOf(card);
+        DiscardCard(index);
+    }
+    public void DiscardCard(int index)
+    {
+        var card = Cards[index];
+        Cards.RemoveAt(index);
+        CardGame.DiscardCard(card);
     }
     public bool IsPlayableCard(Card card)
     {
@@ -62,4 +84,6 @@ public interface PlayerBehaviour
 {
     public Player GetPlayer();
     public void StartTurn(Action onTurnEnd);
+    public void DiscardCards(Action onDiscardEnd, int quantity);
+    // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message);
 }

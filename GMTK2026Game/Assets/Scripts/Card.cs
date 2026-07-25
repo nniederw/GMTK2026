@@ -27,4 +27,15 @@ public enum JokerType
     BlackNumber,
     PotOfGreed,
     RedHerring,
+    Taxes,
+}
+public enum SpecialType
+{
+    Add,
+    Subtract,
+    Steal,
+    Trade,
+    Skip,
+    Reverse,
+
 }

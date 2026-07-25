@@ -5,45 +5,34 @@ using UnityEngine;
 public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
 {
     [SerializeField] private VisualCard CardPrefab;
+    [SerializeField] private PlayerIndicator Indicator;
     private Player Player = new Player();
-    // private List<VisualCard> CardPrefabPool = new();
-    // private const int StartPoolSize = 5;
-    // private ClickableCard HighlightedCard = null;
-    // private float CardLength = 1.45f;
     private Action OnTurnEnd;
+    private int DiscardCardAmount = 0;
+    private Action OnDiscardEnd;
+    private TurnAction CurrentTurnAction = TurnAction.None;
     private void Start()
     {
-        // for (int i = 0; i < StartPoolSize; i++)
-        // {
-        //     AddClickableCardToPool();
-        // }
-        // CardGameManager.SubscribeOnPlayStackClick(OnPlayStackClick);
-        // CardGameManager.SubscribeOnDrawStackClick(OnDrawStackClick);
+        Indicator.AssignPlayer(Player);
+        Indicator.SetName(name);
     }
-    // private void OnPlayStackClick()
-    // {
-    //     if (HighlightedCard == null)
-    //     {
-    //         return;
-    //     }
-    //     Debug.Log($"Try playing card {HighlightedCard.Card}, playable: {Player.IsPlayableCard(HighlightedCard.Card)}");
-    //     if (Player.IsPlayableCard(HighlightedCard.Card))
-    //     {
-    //         HighlightedCard.Highlighted = false;
-    //         Player.PlayCard(HighlightedCard.Card);
-    //     }
-    // }
-    // private void OnDrawStackClick()
-    // {
-    //     Player.DrawNormalCard();
-    // }
-    // private void AddClickableCardToPool()
-    // {
-    //     var card = Instantiate(CardPrefab, transform);
-    //     card.SubscribeOnCardClick(OnCardClick);
-    //     CardPrefabPool.Add(card);
-    // }
     private void Update()
+    {
+        switch (CurrentTurnAction)
+        {
+            case TurnAction.NormalTurn:
+                CurrentTurnAction = TurnAction.None;
+                DoTurn();
+                OnTurnEnd.Invoke();
+                break;
+            case TurnAction.DiscardCards:
+                CurrentTurnAction = TurnAction.None;
+                DoDiscardCards();
+                OnDiscardEnd.Invoke();
+                break;
+        }
+    }
+    private void DoTurn()
     {
         int cardCount = Player.CardCount();
         List<(Card card, int index)> cards = new();
@@ -64,7 +53,34 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
             Player.PlayCard(card.index);
             return;
         }
-        return; //todo
+        Player.DrawNormalCard();
+    }
+    private void DoDiscardCards()
+    {
+        while (Player.CardCount() > 0 && DiscardCardAmount > 0)
+        {
+            DiscardCardAmount--;
+            var cards = Player.GetAllCards();
+            var numberCards = cards.Where(i => i.CardType == CardType.Number);
+            var duplicateNumbers = numberCards.Except(numberCards.Distinct()).ToList();
+            if (duplicateNumbers.Any())
+            {
+                Player.DiscardCard(duplicateNumbers.First());
+                continue;
+            }
+            if (numberCards.Any())
+            {
+                var sortedNumbers = numberCards.ToList();
+                sortedNumbers.Sort((a, b) => b.Number.CompareTo(a.Number));
+                Player.DiscardCard(sortedNumbers.First());
+                continue;
+            }
+            if (cards.Any())
+            {
+                var card = cards.First();
+                Player.DiscardCard(card);
+            }
+        }
     }
     public Player GetPlayer()
     {
@@ -72,6 +88,14 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
     }
     public void StartTurn(Action onTurnEnd)
     {
+        CurrentTurnAction = TurnAction.NormalTurn;
         OnTurnEnd = onTurnEnd;
+        Debug.Log("Starting turn for computer");
+    }
+    public void DiscardCards(Action onDiscardEnd, int quantity)
+    {
+        CurrentTurnAction = TurnAction.DiscardCards;
+        OnDiscardEnd = onDiscardEnd;
+        DiscardCardAmount = quantity;
     }
 }

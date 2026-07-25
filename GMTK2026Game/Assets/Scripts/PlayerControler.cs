@@ -10,6 +10,25 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
     private ClickableCard HighlightedCard = null;
     private float CardLength = 1.45f;
     private Action OnTurnEnd;
+    private Action OnDiscardingEnd;
+    private TurnAction CurrentTurnAction = TurnAction.None;
+    private int ToDiscardQuantity = 0;
+    public Player GetPlayer()
+    {
+        return Player;
+    }
+    public void StartTurn(Action onTurnEnd)
+    {
+        CurrentTurnAction = TurnAction.NormalTurn;
+        OnTurnEnd = onTurnEnd;
+        Debug.Log("Starting turn for player");
+    }
+    public void DiscardCards(Action onDiscardEnd, int quantity)
+    {
+        CurrentTurnAction = TurnAction.DiscardCards;
+        ToDiscardQuantity = quantity;
+        OnDiscardingEnd = onDiscardEnd;
+    }
     private void Start()
     {
         for (int i = 0; i < StartPoolSize; i++)
@@ -18,29 +37,6 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         }
         CardGameManager.SubscribeOnPlayStackClick(OnPlayStackClick);
         CardGameManager.SubscribeOnDrawStackClick(OnDrawStackClick);
-    }
-    private void OnPlayStackClick()
-    {
-        if (HighlightedCard == null)
-        {
-            return;
-        }
-        Debug.Log($"Try playing card {HighlightedCard.Card}, playable: {Player.IsPlayableCard(HighlightedCard.Card)}");
-        if (Player.IsPlayableCard(HighlightedCard.Card))
-        {
-            HighlightedCard.Highlighted = false;
-            Player.PlayCard(HighlightedCard.Card);
-        }
-    }
-    private void OnDrawStackClick()
-    {
-        Player.DrawNormalCard();
-    }
-    private void AddClickableCardToPool()
-    {
-        var card = Instantiate(CardPrefab, transform);
-        card.SubscribeOnCardClick(OnCardClick);
-        CardPrefabPool.Add(card);
     }
     private void Update()
     {
@@ -66,8 +62,62 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
             cardPos += CardLength;
         }
     }
+    private void OnPlayStackClick()
+    {
+        if (HighlightedCard == null)
+        {
+            return;
+        }
+        switch (CurrentTurnAction)
+        {
+            case TurnAction.NormalTurn:
+                if (Player.IsPlayableCard(HighlightedCard.Card))
+                {
+                    Player.PlayCard(HighlightedCard.Card);
+                    EndTurn();
+                }
+                break;
+            case TurnAction.DiscardCards:
+                Player.DiscardCard(HighlightedCard.Card);
+                ToDiscardQuantity--;
+                if (ToDiscardQuantity == 0)
+                {
+                    EndDiscarding();
+                }
+                break;
+        }
+    }
+    private void EndTurn()
+    {
+        CurrentTurnAction = TurnAction.None;
+        OnTurnEnd.Invoke();
+    }
+    private void EndDiscarding()
+    {
+        CurrentTurnAction = TurnAction.None;
+        OnDiscardingEnd.Invoke();
+    }
+    private void OnDrawStackClick()
+    {
+        if (CurrentTurnAction != TurnAction.NormalTurn)
+        {
+            return;
+        }
+        Player.DrawNormalCard();
+        EndTurn();
+    }
+    private void AddClickableCardToPool()
+    {
+        var card = Instantiate(CardPrefab, transform);
+        card.SubscribeOnCardClick(OnCardClick);
+        CardPrefabPool.Add(card);
+    }
     private void OnCardClick(ClickableCard card)
     {
+        if (CurrentTurnAction != TurnAction.NormalTurn)
+        {
+            return;
+        }
         if (HighlightedCard == null)
         {
             HighlightedCard = card;
@@ -84,12 +134,16 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         HighlightedCard = card;
         card.Highlighted = true;
     }
-    public Player GetPlayer()
-    {
-        return Player;
-    }
-    public void StartTurn(Action onTurnEnd)
-    {
-        OnTurnEnd = onTurnEnd;
-    }
+
+    // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message)
+    // {
+    //     throw new NotImplementedException();
+    // }
+}
+public enum TurnAction
+{
+    None,
+    NormalTurn,
+    DiscardCards,
+    SelectCards,
 }

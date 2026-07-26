@@ -21,13 +21,13 @@ j- red herring: doesnt do jack
 j- taxes: next player discards 2 cards of his choice
 j- all seeing eye: you are able to see every players hand until end of your next turn
 j- plague doctor: gunk 1 random card of each opponents hand (card not usable for 1/2 turns)
-j- xxx: consists of 3 pieces, collecting all pieces in hand gives you a 0
-j- 
+j- broken piece: consists of 3 pieces, collecting all pieces in hand gives you a 0, can be played to draw 1 extra card
+j- the magician: transform a chosen card into another (choose two cards, the first chosen becomes the second, can be opponents card into yours, doubling one of your own, or one of yours into that of an opponent[seeing card not necessary])
 
 specials: red cards, white symbols, text box explaining effect, no name, 
 xs- add/substract: add/substract 1 from a chosen numbercard
 s- steal: steal 1 card from other player (cards not shown) (make this a joker?)
-s- trade: trade 2 cards from other player for 2 of yours (cards not shown)
+xs- trade: trade 2 cards from other player for 2 of yours (cards not shown)
 xs- skip turn: skips chosen players next turn
 xs- block: blocks an effect aiming at a single player, events cant be blocked
 xs- reverse: reverses turn order
@@ -42,4 +42,5 @@ e- christmas: each player gifts another player 1 card
 e- communism: players draw/discard up to average handcount when event is triggered
 e- deus ex machina: one numbercard in each players hand will be transformed to numbercard needed when event is triggered(if number is 0, next player not able to play it)
 e- (only if points are implemented)capitalism: from event trigger on forward, players can buy carddraw from chosen pool(free action), prices increase with each purchase (starting number 3p, joker 10p, spec 5p)?
+e- pandemic: 3cards in each players hand get gunked for 1-3turns
 e-

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardPool
   Cards:
   - Card: {fileID: 11400000, guid: bed245a3bd67b4a4e954ff30581ff08d, type: 2}
-    Quantity: 1
+    Quantity: 0
   - Card: {fileID: 11400000, guid: 586e442fb6d59bb49a5de875866e9bc7, type: 2}
     Quantity: 2
   - Card: {fileID: 11400000, guid: abac355394745f54b86cb7c34bb4720b, type: 2}
@@ -33,3 +33,5 @@ MonoBehaviour:
     Quantity: 9
   - Card: {fileID: 11400000, guid: a7233d5d5a5b0484cafb8994d8296450, type: 2}
     Quantity: 10
+  - Card: {fileID: 11400000, guid: 2ec4e9fb8e3a3eb44ae024a4f3549c4e, type: 2}
+    Quantity: 5

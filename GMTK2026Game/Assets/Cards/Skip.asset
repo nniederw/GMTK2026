@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02f6e2662235ecb4b9c8a5b3d56f455e, type: 3}
-  m_Name: 6
+  m_Name: Skip
   m_EditorClassIdentifier: 
-  CardType: 0
-  Number: 6
-  NextNumber: {fileID: 11400000, guid: 3f000d9fd7afdc14a972fda7a835c3a3, type: 2}
-  PreviousNumber: {fileID: 11400000, guid: 172ececfd0c9e544aaf70898ead3ec8e, type: 2}
+  CardType: 2
+  Number: 0
+  NextNumber: {fileID: 0}
+  PreviousNumber: {fileID: 0}
   JokerType: 0
-  Sprite: {fileID: 7792153380951505386, guid: 3e955b5a7b38c93489c1fc3bc6767017, type: 3}
+  SpecialType: 5
+  Description: 
+  Sprite: {fileID: 7941067700184411139, guid: 15795908c5edbac4abe8b40e34c1d538, type: 3}
   BackSideSprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}

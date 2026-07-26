@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 public class PlayerControler : MonoBehaviour, PlayerBehaviour
 {
+    public string PlayerName => name;
     [SerializeField] private ClickableCard CardPrefab;
+    [SerializeField] private PlayerSelectionWheel PlayerSelectionWheelPrefab;
     private Player Player = new Player();
     private List<ClickableCard> CardPrefabPool = new();
     private const int StartPoolSize = 5;
@@ -134,7 +137,13 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         HighlightedCard = card;
         card.Highlighted = true;
     }
-
+    public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        var playerSelection = Instantiate(PlayerSelectionWheelPrefab);
+        var players = CardGameManager.Instance.GetPlayers.ToList();
+        var playerNames = players.Select(i => (i.GetPlayer(), i.PlayerName));
+        playerSelection.GenerateWheel(playerNames, onSelectPlayerEnd, quantity);
+    }
     // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message)
     // {
     //     throw new NotImplementedException();

@@ -35,6 +35,11 @@ public class Player
         var card = CardGame.DrawCardFromNormalPool();
         AddCard(card);
     }
+    public IEnumerable<Card> RemoveRandomCards(int quantity)
+    {
+        quantity = Math.Min(quantity, Cards.Count);
+        return RandomUtils.RandomSubset(Cards, quantity);
+    }
     public IEnumerable<int> GetPlayableCardIndexes()
     {
         for (int i = 0; i < Cards.Count; i++)
@@ -82,8 +87,10 @@ public class Player
 }
 public interface PlayerBehaviour
 {
+    public string PlayerName { get; }
     public Player GetPlayer();
     public void StartTurn(Action onTurnEnd);
     public void DiscardCards(Action onDiscardEnd, int quantity);
     // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message);
+    public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity);
 }

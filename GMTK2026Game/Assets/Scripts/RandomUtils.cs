@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 public static class RandomUtils
 {
-    public static IEnumerable<T> RandomSubset<T>(List<T> source, int count, Random rng = null)
+    public static IEnumerable<T> RandomSubset<T>(IEnumerable<T> source, int count, Random rng = null)
     {
-        if (count > source.Count)
+        var list = source.ToList();
+        if (count > list.Count)
         {
             throw new ArgumentException("count cannot be larger than list size");
         }
         rng ??= new Random();
-        var list = source.ToList();
         for (int i = 0; i < count; i++)
         {
             int j = rng.Next(i, list.Count);

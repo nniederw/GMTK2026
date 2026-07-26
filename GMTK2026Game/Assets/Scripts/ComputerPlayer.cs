@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
 {
+    public string PlayerName => name;
     [SerializeField] private VisualCard CardPrefab;
     [SerializeField] private PlayerIndicator Indicator;
     private Player Player = new Player();
@@ -97,5 +98,12 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
         CurrentTurnAction = TurnAction.DiscardCards;
         OnDiscardEnd = onDiscardEnd;
         DiscardCardAmount = quantity;
+    }
+
+    public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        IEnumerable<Player> otherPlayers = Player.CardGame.GetPlayers.Except(Player);
+        var result = RandomUtils.RandomSubset(otherPlayers, quantity);
+        onSelectPlayerEnd.Invoke(result);
     }
 }

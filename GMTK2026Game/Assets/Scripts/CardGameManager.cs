@@ -11,8 +11,9 @@ public class CardGameManager : MonoBehaviour
     [SerializeField] private Vector2 LocalOffsetDrawStack;
     [SerializeField] private Vector2 LocalOffsetPlayStack;
     private List<PlayerBehaviour> PlayersInOrder;
+    public IReadOnlyList<PlayerBehaviour> GetPlayers => PlayersInOrder;
     private Dictionary<Player, PlayerBehaviour> PlayerBehaviourMapping;
-    private int Direction = 1;
+    public int Direction = 1;
     private int CurrentPlayer = 0;
     public CardGame Game;
     public static CardGameManager Instance;
@@ -86,6 +87,10 @@ public class CardGameManager : MonoBehaviour
             var player = NextXPlayerIndex(players.NextPlayers.First());
             Instance.PlayersInOrder[player].DiscardCards(() => PlayerDiscard(newIdf, quantity), quantity);
         }
+    }
+    public static void SelectPlayers(Player player, Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        Instance.PlayerBehaviourMapping[player].SelectPlayers(onSelectPlayerEnd, quantity);
     }
     private static int NextXPlayerIndex(int x)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class CardGame
     public const int StartNormalCardCount = 5;
     public const int StartJokerCardCount = 1;
     private List<Player> Players = new();
+    public IReadOnlyList<Player> GetPlayers => Players;
     private Queue<Card> NormalCardPool;
     private Queue<Card> JokerCardPool;
     public Card LastPlayedCard { get; private set; }
@@ -49,32 +51,46 @@ public class CardGame
         {
             player.ClearCards();
             player.CardGame = this;
-            for (int i = 0; i < StartNormalCardCount; i++)
-            {
-                player.AddCard(DrawCardFromNormalPool());
-            }
-            for (int i = 0; i < StartJokerCardCount; i++)
-            {
-                player.AddCard(DrawCardFromJokerPool());
-            }
+            InitializeStartingHand(player);
+        }
+    }
+    private void InitializeStartingHand(Player player)
+    {
+        for (int i = 0; i < StartNormalCardCount; i++)
+        {
+            player.AddCard(DrawCardFromNormalPool());
+        }
+        for (int i = 0; i < StartJokerCardCount; i++)
+        {
+            player.AddCard(DrawCardFromJokerPool());
         }
     }
     public void SetLastPlayedCard(Card card)
     {
         LastPlayedCard = card;
     }
-    public void PlayCard(Player player, Card card)
+    public void PlayCard(Player player, Card card, Action onFinishPlay)
     {
-        // if (card.Number != 10)
-        // {
-        //     PlayedCards.Add(card);
-        // }
+        PlayedCards.Add(card);
         if (card.CardType == CardType.Number)
         {
+            if (card.Number == 0)
+            {
+                if (CardGameManager.Instance.PlayerBehaviourMapping[player].PlayerName == "You")
+                {
+                    CardGameManager.Instance.ActivateWin();
+                }
+                else
+                {
+                    CardGameManager.Instance.ActivateLose();
+                }
+            }
             LastPlayedCard = card;
             CardGameManager.SetPlayStackCard(LastPlayedCard);
             player.AddCard(DrawCardFromNormalPool());
             player.AddCard(DrawCardFromJokerPool());
+            onFinishPlay();
+            return;
         }
         if (card.CardType == CardType.Joker)
         {
@@ -83,16 +99,79 @@ public class CardGame
                 case JokerType.PotOfGreed:
                     player.AddCard(DrawCardFromNormalPool());
                     player.AddCard(DrawCardFromJokerPool());
+                    onFinishPlay();
                     break;
                 case JokerType.RedHerring:
+                    onFinishPlay();
                     break;
                 case JokerType.Taxes:
-                    CardGameManager.PlayerDiscard(new PlayerIdentifier(nextPlayers: new List<int> { 1 }), 2);
+                    CardGameManager.PlayerDiscard(new PlayerIdentifier(nextPlayers: new List<int> { 1 }), 2, onFinishPlay);
+                    break;
+            }
+            return;
+        }
+        if (card.CardType == CardType.Special)
+        {
+            switch (card.SpecialType)
+            {
+                case SpecialType.Skip:
+                    CardGameManager.SelectPlayers(player,
+                    (player) => { CardGameManager.SkipPlayer(player.First()); onFinishPlay(); }, 1);
+                    break;
+                case SpecialType.Reverse:
+                    CardGameManager.Instance.Direction *= -1;
+                    onFinishPlay();
+                    break;
+                case SpecialType.Steal:
+                    CardGameManager.SelectPlayers(player,
+                    (players) => { player.AddCard(players.First().RemoveRandomCards(1).First()); onFinishPlay(); },
+                     1);
+                    break;
+                    // case SpecialType.Subtract:
+                    //     CardGameManager.SelectCards(player, (cards) =>
+                    //     {
+                    //         var c = cards.First();
+                    //         c
+                    //     }
+            }
+        }
+        if (card.CardType == CardType.Event)
+        {
+            switch (card.EventType)
+            {
+                case EventType.Christmas:
+
+                    break;
+                case EventType.Communism:
+                    break;
+                case EventType.Friday13th:
+                    foreach (var rcard in player.RemoveRandomCards(player.CardCount()))
+                    {
+                        PlayedCards.Add(rcard);
+                    }
+                    InitializeStartingHand(player);
+                    break;
+                case EventType.RobinHood:
+
+                    break;
+                case EventType.Inflation:
+                    foreach (var p in Players)
+                    {
+                        var oldCards = p.GetAllCards().ToList();
+                        p.ClearCards();
+                        foreach (var ocard in oldCards)
+                        {
+                            Card newCard = ocard;
+                            if (ocard.CardType == CardType.Number)
+                            {
+                                newCard = ocard.PreviousNumber;
+                            }
+                            p.AddCard(newCard);
+                        }
+                    }
                     break;
             }
         }
-
-        //todo effect
     }
     public void DiscardCard(Card card)
     {

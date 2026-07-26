@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 public class PlayerControler : MonoBehaviour, PlayerBehaviour
 {
+    public string PlayerName => name;
     [SerializeField] private ClickableCard CardPrefab;
+    [SerializeField] private PlayerSelectionWheel PlayerSelectionWheelPrefab;
     private Player Player = new Player();
     private List<ClickableCard> CardPrefabPool = new();
     private const int StartPoolSize = 5;
@@ -11,8 +14,10 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
     private float CardLength = 1.45f;
     private Action OnTurnEnd;
     private Action OnDiscardingEnd;
+    Action<IEnumerable<Card>> OnCardSelect;
     private TurnAction CurrentTurnAction = TurnAction.None;
     private int ToDiscardQuantity = 0;
+    private int ToSelectQuantity = 0;
     public Player GetPlayer()
     {
         return Player;
@@ -73,8 +78,8 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
             case TurnAction.NormalTurn:
                 if (Player.IsPlayableCard(HighlightedCard.Card))
                 {
-                    Player.PlayCard(HighlightedCard.Card);
-                    EndTurn();
+                    CurrentTurnAction = TurnAction.None;
+                    Player.PlayCard(HighlightedCard.Card, OnTurnEnd);
                 }
                 break;
             case TurnAction.DiscardCards:
@@ -120,6 +125,12 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         }
         if (HighlightedCard == null)
         {
+            if (CurrentTurnAction == TurnAction.SelectCards)
+            {
+                CurrentTurnAction = TurnAction.None;
+                List<Card> cards = new List<Card> { card.Card };
+                OnCardSelect(cards);
+            }
             HighlightedCard = card;
             card.Highlighted = true;
             return;
@@ -134,11 +145,20 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
         HighlightedCard = card;
         card.Highlighted = true;
     }
+    public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        var playerSelection = Instantiate(PlayerSelectionWheelPrefab);
+        var players = CardGameManager.Instance.GetPlayers.ToList();
+        var playerNames = players.Select(i => (i.GetPlayer(), i.PlayerName));
+        playerSelection.GenerateWheel(playerNames, onSelectPlayerEnd, quantity);
+    }
 
-    // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    public void SelectCards(Action<IEnumerable<Card>> onCardSelect, int quantity, string message)
+    {
+        CurrentTurnAction = TurnAction.DiscardCards;
+        ToDiscardQuantity = quantity;
+        OnCardSelect = onCardSelect;
+    }
 }
 public enum TurnAction
 {

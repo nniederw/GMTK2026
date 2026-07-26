@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class CardGameManager : MonoBehaviour
 {
     [SerializeField] private ClickableCard ClickableCardPrefab;
@@ -11,8 +12,10 @@ public class CardGameManager : MonoBehaviour
     [SerializeField] private Vector2 LocalOffsetDrawStack;
     [SerializeField] private Vector2 LocalOffsetPlayStack;
     private List<PlayerBehaviour> PlayersInOrder;
-    private Dictionary<Player, PlayerBehaviour> PlayerBehaviourMapping;
-    private int Direction = 1;
+    private List<bool> SkippedPlayers;
+    public IReadOnlyList<PlayerBehaviour> GetPlayers => PlayersInOrder;
+    public Dictionary<Player, PlayerBehaviour> PlayerBehaviourMapping;
+    public int Direction = 1;
     private int CurrentPlayer = 0;
     public CardGame Game;
     public static CardGameManager Instance;
@@ -21,6 +24,9 @@ public class CardGameManager : MonoBehaviour
     private bool AfterTurn = false;
     private float TimeSinceTurnEnd = 0f;
     private float TimeInbetweenTurns = 1f;
+    private static string SceneName = "Game";
+    public GameObject YouWin;
+    public GameObject YouLose;
     private void Awake()
     {
         Instance = this;
@@ -48,6 +54,34 @@ public class CardGameManager : MonoBehaviour
             AfterTurn = false;
         }
     }
+    public void ActivateWin()
+    {
+        YouWin.SetActive(true);
+    }
+    public void ActivateLose()
+    {
+        YouLose.SetActive(true);
+    }
+    public static void StartGame()
+    {
+        SceneManager.LoadScene(SceneName);
+    }
+    public static int PlayerIndex(Player player)
+    {
+        for (int i = 0; i < Instance.PlayersInOrder.Count; i++)
+        {
+            var p = Instance.PlayersInOrder[i];
+            if (p.GetPlayer() == player)
+            {
+                return i;
+            }
+        }
+        throw new Exception();
+    }
+    public static void SkipPlayer(Player player)
+    {
+        Instance.SkippedPlayers[PlayerIndex(player)] = true;
+    }
     public static void SubscribeOnPlayStackClick(Action action)
     {
         Instance.OnPlayStackClick += action;
@@ -63,6 +97,7 @@ public class CardGameManager : MonoBehaviour
     public static void SetPlayers(IEnumerable<PlayerBehaviour> players)
     {
         Instance.PlayersInOrder = players.ToList();
+        Instance.SkippedPlayers = Enumerable.Repeat(false, Instance.PlayersInOrder.Count).ToList();
         Instance.PlayerBehaviourMapping = new();
         foreach (var pb in Instance.PlayersInOrder)
         {
@@ -72,20 +107,29 @@ public class CardGameManager : MonoBehaviour
         Instance.Direction = 1;
         OnTurnEnd();
     }
-    public static void PlayerDiscard(PlayerIdentifier players, int quantity)
+    public static void PlayerDiscard(PlayerIdentifier players, int quantity, Action onFinish)
     {
         if (players.Players.Any())
         {
             var newIdf = new PlayerIdentifier(players.Players.Skip(1), players.NextPlayers);
             var player = players.Players.First();
-            Instance.PlayerBehaviourMapping[player].DiscardCards(() => PlayerDiscard(newIdf, quantity), quantity);
+            Instance.PlayerBehaviourMapping[player].DiscardCards(() => PlayerDiscard(newIdf, quantity, () => { }), quantity);
         }
         if (players.NextPlayers.Any())
         {
             var newIdf = new PlayerIdentifier(players.Players, players.NextPlayers.Skip(1));
             var player = NextXPlayerIndex(players.NextPlayers.First());
-            Instance.PlayersInOrder[player].DiscardCards(() => PlayerDiscard(newIdf, quantity), quantity);
+            Instance.PlayersInOrder[player].DiscardCards(() => PlayerDiscard(newIdf, quantity, () => { }), quantity);
         }
+        onFinish();
+    }
+    public static void SelectPlayers(Player player, Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        Instance.PlayerBehaviourMapping[player].SelectPlayers(onSelectPlayerEnd, quantity);
+    }
+    public static void SelectCards(Player player, Action<IEnumerable<Card>> onSelectCardEnd, int quantity)
+    {
+        Instance.PlayerBehaviourMapping[player].SelectCards(onSelectCardEnd, quantity, "");
     }
     private static int NextXPlayerIndex(int x)
     {
@@ -101,6 +145,11 @@ public class CardGameManager : MonoBehaviour
     private static void ContinueTurnEnd()
     {
         Instance.CurrentPlayer = NextXPlayerIndex(1);
+        if (Instance.SkippedPlayers[Instance.CurrentPlayer])
+        {
+            Instance.SkippedPlayers[Instance.CurrentPlayer] = false;
+            ContinueTurnEnd();
+        }
         Instance.PlayersInOrder[Instance.CurrentPlayer].StartTurn(OnTurnEnd);
     }
 }

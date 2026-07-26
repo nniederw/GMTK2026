@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
 {
+    public string PlayerName => name;
     [SerializeField] private VisualCard CardPrefab;
     [SerializeField] private PlayerIndicator Indicator;
     private Player Player = new Player();
@@ -23,7 +25,6 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
             case TurnAction.NormalTurn:
                 CurrentTurnAction = TurnAction.None;
                 DoTurn();
-                OnTurnEnd.Invoke();
                 break;
             case TurnAction.DiscardCards:
                 CurrentTurnAction = TurnAction.None;
@@ -43,17 +44,18 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
         var numberCards = cards.Where(i => i.card.CardType == CardType.Number).ToList();
         if (numberCards.Any())
         {
-            Player.PlayCard(numberCards.First().index);
+            Player.PlayCard(numberCards.First().index, OnTurnEnd);
             return;
         }
         var nonNumberCards = cards.Where(i => i.card.CardType != CardType.Number).ToList();
         if (nonNumberCards.Any())
         {
             var card = nonNumberCards[new System.Random().Next(nonNumberCards.Count)];
-            Player.PlayCard(card.index);
+            Player.PlayCard(card.index, OnTurnEnd);
             return;
         }
         Player.DrawNormalCard();
+        OnTurnEnd();
     }
     private void DoDiscardCards()
     {
@@ -97,5 +99,20 @@ public class ComputerPlayer : MonoBehaviour, PlayerBehaviour
         CurrentTurnAction = TurnAction.DiscardCards;
         OnDiscardEnd = onDiscardEnd;
         DiscardCardAmount = quantity;
+    }
+
+    public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity)
+    {
+        IEnumerable<Player> otherPlayers = Player.CardGame.GetPlayers.Except(Player);
+        var result = RandomUtils.RandomSubset(otherPlayers, quantity);
+        onSelectPlayerEnd.Invoke(result);
+    }
+
+    public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message)
+    {
+        var cards = Player.GetAllCards().ToList();
+        quantity = Math.Max(quantity, cards.Count);
+        var result = RandomUtils.RandomSubset(cards, quantity);
+        OnCardSelect(result);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -68,15 +69,27 @@ public class CardGame
     {
         LastPlayedCard = card;
     }
-    public void PlayCard(Player player, Card card)
+    public void PlayCard(Player player, Card card, Action onFinishPlay)
     {
         PlayedCards.Add(card);
         if (card.CardType == CardType.Number)
         {
+            if (card.Number == 0)
+            {
+                if (CardGameManager.Instance.PlayerBehaviourMapping[player].PlayerName == "You")
+                {
+                    CardGameManager.Instance.ActivateWin();
+                }
+                else
+                {
+                    CardGameManager.Instance.ActivateLose();
+                }
+            }
             LastPlayedCard = card;
             CardGameManager.SetPlayStackCard(LastPlayedCard);
             player.AddCard(DrawCardFromNormalPool());
             player.AddCard(DrawCardFromJokerPool());
+            onFinishPlay();
             return;
         }
         if (card.CardType == CardType.Joker)
@@ -86,11 +99,13 @@ public class CardGame
                 case JokerType.PotOfGreed:
                     player.AddCard(DrawCardFromNormalPool());
                     player.AddCard(DrawCardFromJokerPool());
+                    onFinishPlay();
                     break;
                 case JokerType.RedHerring:
+                    onFinishPlay();
                     break;
                 case JokerType.Taxes:
-                    CardGameManager.PlayerDiscard(new PlayerIdentifier(nextPlayers: new List<int> { 1 }), 2);
+                    CardGameManager.PlayerDiscard(new PlayerIdentifier(nextPlayers: new List<int> { 1 }), 2, onFinishPlay);
                     break;
             }
             return;
@@ -99,14 +114,25 @@ public class CardGame
         {
             switch (card.SpecialType)
             {
+                case SpecialType.Skip:
+                    CardGameManager.SelectPlayers(player,
+                    (player) => { CardGameManager.SkipPlayer(player.First()); onFinishPlay(); }, 1);
+                    break;
                 case SpecialType.Reverse:
                     CardGameManager.Instance.Direction *= -1;
+                    onFinishPlay();
                     break;
                 case SpecialType.Steal:
                     CardGameManager.SelectPlayers(player,
-                    (players) => { player.AddCard(players.First().RemoveRandomCards(1).First()); },
+                    (players) => { player.AddCard(players.First().RemoveRandomCards(1).First()); onFinishPlay(); },
                      1);
                     break;
+                    // case SpecialType.Subtract:
+                    //     CardGameManager.SelectCards(player, (cards) =>
+                    //     {
+                    //         var c = cards.First();
+                    //         c
+                    //     }
             }
         }
         if (card.CardType == CardType.Event)

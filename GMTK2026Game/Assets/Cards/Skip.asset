@@ -18,6 +18,7 @@ MonoBehaviour:
   PreviousNumber: {fileID: 0}
   JokerType: 0
   SpecialType: 5
+  EventType: 0
   Description: 
   Sprite: {fileID: 7941067700184411139, guid: 15795908c5edbac4abe8b40e34c1d538, type: 3}
   BackSideSprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}

@@ -33,6 +33,7 @@ public class PlayerSelectionWheel : MonoBehaviour
         if (SelectedPlayers.Count == PlayersToSelect)
         {
             OnPlayersSelect(SelectedPlayers);
+            Destroy(gameObject);
         }
     }
     private static IEnumerable<Vector3> PointsOnCircle(int n, float radius, Vector3 center = new Vector3())

@@ -14,12 +14,12 @@ public class Player
     {
         Cards.Add(card);
     }
-    public void PlayCard(Card card)
+    public void PlayCard(Card card, Action onFinishPlay)
     {
         int index = Cards.IndexOf(card);
-        PlayCard(index);
+        PlayCard(index, onFinishPlay);
     }
-    public void PlayCard(int index)
+    public void PlayCard(int index, Action onFinishPlay)
     {
         if (index < 0 || index >= Cards.Count)
         {
@@ -28,7 +28,7 @@ public class Player
         Card card = Cards[index];
         Cards.RemoveAt(index);
         Debug.Log($"Playing Card {card}");
-        CardGame.PlayCard(this, card);
+        CardGame.PlayCard(this, card, onFinishPlay);
     }
     public void DrawNormalCard()
     {
@@ -91,6 +91,6 @@ public interface PlayerBehaviour
     public Player GetPlayer();
     public void StartTurn(Action onTurnEnd);
     public void DiscardCards(Action onDiscardEnd, int quantity);
-    // public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message);
+    public void SelectCards(Action<IEnumerable<Card>> OnCardSelect, int quantity, string message);
     public void SelectPlayers(Action<IEnumerable<Player>> onSelectPlayerEnd, int quantity);
 }

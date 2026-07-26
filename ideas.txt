@@ -35,12 +35,12 @@ xs- fusion: fuse 2 numbercards together (2 possible ways, just added value/can p
 s-
 
 events: simple full card arts, affects all players, no text box
-e- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
-e- inflation: all number values increase by 1
-e- robin hood: player with least amount of cards steals one from every other player
-e- christmas: each player gifts another player 1 card
-e- communism: players draw/discard up to average handcount when event is triggered
-e- deus ex machina: one numbercard in each players hand will be transformed to numbercard needed when event is triggered(if number is 0, next player not able to play it)
+xe- friday 13th: your hand gets cut, discard whole hand and draw new (6cards, 3 norm, 2joker,1spec)/(4norm,2j)
+xe- inflation: all number values increase by 1
+xe- robin hood: player with least amount of cards steals one from every other player
+xe- christmas: each player gifts another player 1 card
+xe- communism: players draw/discard up to average handcount when event is triggered
+xe- deus ex machina: one numbercard in each players hand will be transformed to numbercard needed when event is triggered(if number is 0, next player not able to play it)
 e- (only if points are implemented)capitalism: from event trigger on forward, players can buy carddraw from chosen pool(free action), prices increase with each purchase (starting number 3p, joker 10p, spec 5p)?
 e- pandemic: 3cards in each players hand get gunked for 1-3turns
 e-

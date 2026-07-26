@@ -19,7 +19,7 @@ xj- black number: play like next normal number, reveals card from "event" pool (
 xj- pot of greed: draw 2 cards (1 normal/1 joker)
 j- red herring: doesnt do jack
 j- taxes: next player discards 2 cards of his choice
-j- all seeing eye: you are able to see every players hand until end of your next turn
+xj- all seeing eye: you are able to see every players hand until end of your next turn
 j- plague doctor: gunk 1 random card of each opponents hand (card not usable for 1/2 turns)
 j- broken piece: consists of 3 pieces, collecting all pieces in hand gives you a 0, can be played to draw 1 extra card
 j- the magician: transform a chosen card into another (choose two cards, the first chosen becomes the second, can be opponents card into yours, doubling one of your own, or one of yours into that of an opponent[seeing card not necessary])

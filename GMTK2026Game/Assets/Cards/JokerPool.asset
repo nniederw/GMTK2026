@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78054a0c4cf5f1f49adec55810a1e958, type: 3}
+  m_Name: JokerPool
+  m_EditorClassIdentifier: 
+  Cards:
+  - Card: {fileID: 11400000, guid: 7790e0e660515ce4fae9dfa1fe6f9abb, type: 2}
+    Quantity: 5
+  - Card: {fileID: 11400000, guid: 2b3c6f8dcf682784489525073dfaba23, type: 2}
+    Quantity: 5
+  - Card: {fileID: 11400000, guid: 7e0a74f6d003c4a4f8637fd18296a647, type: 2}
+    Quantity: 5
+  - Card: {fileID: 11400000, guid: bed245a3bd67b4a4e954ff30581ff08d, type: 2}
+    Quantity: 3

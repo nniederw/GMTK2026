@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class CardGameManager : MonoBehaviour
@@ -30,9 +29,6 @@ public class CardGameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-    private void Start()
-    {
         PlayStackTopCard = Instantiate(ClickableCardPrefab, transform);
         DrawStackTopCard = Instantiate(ClickableCardPrefab, transform);
         PlayStackTopCard.SubscribeOnCardClick((_) => OnPlayStackClick.Invoke());
@@ -40,6 +36,10 @@ public class CardGameManager : MonoBehaviour
         PlayStackTopCard.transform.localPosition = LocalOffsetPlayStack;
         DrawStackTopCard.transform.localPosition = LocalOffsetDrawStack;
         DrawStackTopCard.HideCard = true;
+    }
+    private void Start()
+    {
+
     }
     private void Update()
     {
@@ -92,6 +92,7 @@ public class CardGameManager : MonoBehaviour
     }
     public static void SetPlayStackCard(Card card)
     {
+        Debug.Log($"Instance:{Instance}");
         Instance.PlayStackTopCard.Card = card;
     }
     public static void SetPlayers(IEnumerable<PlayerBehaviour> players)

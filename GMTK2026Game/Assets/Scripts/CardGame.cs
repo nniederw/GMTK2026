@@ -22,11 +22,11 @@ public class CardGame
         PlayedCards = new();
         FillQueue(cards, NormalCardPool);
         FillQueue(jokerCards, JokerCardPool);
-        NormalCards = cards.Select(i => i.Card).ToHashSet();
-        JokerCards = jokerCards.Select(i => i.Card).ToHashSet();
-        if (NormalCards.Intersect(JokerCards).Any())
+        // NormalCards = cards.Select(i => i.Card).ToHashSet();
+        // JokerCards = jokerCards.Select(i => i.Card).ToHashSet();
+        // if (NormalCards.Intersect(JokerCards).Any())
         {
-            Debug.Log($"Cards in {nameof(NormalCards)} & {nameof(JokerCards)} are not mutually exclusive.");
+            // Debug.Log($"Cards in {nameof(NormalCards)} & {nameof(JokerCards)} are not mutually exclusive.");
         }
         LastPlayedCard = startLastPlayedCard;
         CardGameManager.SetPlayStackCard(LastPlayedCard);

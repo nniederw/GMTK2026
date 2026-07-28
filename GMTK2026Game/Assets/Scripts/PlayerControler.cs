@@ -17,7 +17,7 @@ public class PlayerControler : MonoBehaviour, PlayerBehaviour
     Action<IEnumerable<Card>> OnCardSelect;
     private TurnAction CurrentTurnAction = TurnAction.None;
     private int ToDiscardQuantity = 0;
-    private int ToSelectQuantity = 0;
+    // private int ToSelectQuantity = 0;
     public Player GetPlayer()
     {
         return Player;

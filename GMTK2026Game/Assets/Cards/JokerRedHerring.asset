@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardType: 1
   Number: 0
+  NextNumber: {fileID: 0}
+  PreviousNumber: {fileID: 0}
   JokerType: 3
-  Sprite: {fileID: -869314177353580492, guid: 02ce4c98de7caea47914d72ea4052ead, type: 3}
+  SpecialType: 0
+  EventType: 0
+  Description: 
+  Sprite: {fileID: 5645950208665097239, guid: 7986346948b918346a11d487df8ada2c, type: 3}
   BackSideSprite: {fileID: -823308487456042529, guid: 1d3fa133b0af38444aea30475ba469e0, type: 3}
